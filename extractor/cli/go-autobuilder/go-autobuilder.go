@@ -270,20 +270,14 @@ func main() {
 		// skip the dependency installation step and run the extractor with `-mod=vendor`
 		if util.FileExists("vendor/modules.txt") {
 			modMode = ModVendor
-		} else if util.DirExists("vendor") {
-			modMode = ModMod
-		}
-	}
 
-	if modMode == ModVendor {
-		// fix go vendor issues with go versions >= 1.14 when no go version is specified in the go.mod
-		// if this is the case, and dependencies were vendored with an old go version (and therefore
-		// do not contain a '## explicit' annotation, the go command will fail and refuse to do any
-		// work
-		//
-		// we work around this by adding an explicit go version of 1.13, which is the last version
-		// where this is not an issue
-		if depMode == GoGetWithModules {
+			// fix go vendor issues with go versions >= 1.14 when no go version is specified in the go.mod
+			// if this is the case, and dependencies were vendored with an old go version (and therefore
+			// do not contain a '## explicit' annotation, the go command will fail and refuse to do any
+			// work
+			//
+			// we work around this by adding an explicit go version of 1.13, which is the last version
+			// where this is not an issue
 			goMod, err := ioutil.ReadFile("go.mod")
 			if err != nil {
 				log.Println("Failed to read go.mod to check for missing Go version")
@@ -301,6 +295,8 @@ func main() {
 					}
 				}
 			}
+		} else if util.DirExists("vendor") {
+			modMode = ModMod
 		}
 	}
 

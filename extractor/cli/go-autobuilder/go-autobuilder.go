@@ -436,6 +436,7 @@ func main() {
 			shouldInstallDependencies = true
 		} else if util.DepErrors("./...", modMode.argsForGoVersion(getEnvGoSemVer())...) {
 			log.Println("Dependencies are still not resolving after the build, continuing to install dependencies.")
+			os.Exit(1)
 
 			shouldInstallDependencies = true
 		}
